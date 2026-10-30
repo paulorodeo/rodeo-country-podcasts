@@ -1,13 +1,13 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
-@import "@fontsource/playfair-display/600.css";
-@import "@fontsource/playfair-display/700.css";
-@import "@fontsource/manrope/400.css";
-@import "@fontsource/manrope/500.css";
-@import "@fontsource/manrope/700.css";
-@import "@fontsource/manrope/800.css";
-@import "@fontsource/barlow-condensed/700.css";
+@import "@fontsource/playfair-display/latin-600.css";
+@import "@fontsource/playfair-display/latin-700.css";
+@import "@fontsource/manrope/latin-400.css";
+@import "@fontsource/manrope/latin-500.css";
+@import "@fontsource/manrope/latin-700.css";
+@import "@fontsource/manrope/latin-800.css";
+@import "@fontsource/barlow-condensed/latin-700.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -249,4 +249,16 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+
+/* Mobile rendering budget: defer layout and paint for sections below the first screen.
+   auto retains measured section dimensions after their first render, reducing later shifts.
+   No JS observers or placeholders are required. */
+.below-fold-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 620px;
+}
+@media (min-width: 768px) {
+  .below-fold-section { contain-intrinsic-size: auto 540px; }
 }

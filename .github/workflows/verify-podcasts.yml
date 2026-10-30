@@ -51,4 +51,5 @@ jobs:
           SITE="https://podcast.fazenda.rodeo"
           curl -sS -L --max-time 25 -o /tmp/rodeo-custom-home.html -w "CUSTOM HOME HTTP %{http_code} total %{time_total}s\\n" "$SITE/"
           curl -sS --max-time 25 -o /tmp/rodeo-custom-rss.xml -w "CUSTOM RSS HTTP %{http_code} type %{content_type}\\n" "$SITE/rss.xml"
+          curl -sS --max-time 25 "$SITE/healthz" | tee /tmp/rodeo-health.json
           python3 scripts/validate-rss.py "$SITE/rss.xml"

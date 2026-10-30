@@ -14,7 +14,7 @@ export function Hero({ feed }: { feed: PodcastFeed }) {
       {/* Studio photograph — right side */}
       <div className="absolute inset-y-0 right-0 -z-10 w-full lg:w-[58%]">
         <img src={media.studio.src} srcSet={media.studio.srcSet} sizes="(min-width:1024px) 58vw, 100vw" width={780} height={880}
-          alt="" fetchPriority="low" decoding="async" className="h-full w-full object-cover object-[70%_center] opacity-45 lg:opacity-90" />
+          alt="" loading="eager" fetchPriority="high" decoding="async" className="h-full w-full object-cover object-[70%_center] opacity-45 lg:opacity-90" />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-background/10" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/40" />
       </div>
@@ -114,9 +114,9 @@ function CoverObject({ ep }: { ep: Episode | undefined }) {
       <div className="relative rounded-md p-[3px] shadow-[var(--shadow-deep)]" style={{ background: "var(--gold-edge)" }}>
         <div className="relative overflow-hidden rounded-[5px] bg-charcoal">
           {ep?.image ? (
-            <img src={ep.image} width={600} height={600} alt={`Capa do episódio ${ep.title}`} fetchPriority="high" className="aspect-square w-full object-cover" />
+            <img src={ep.image} width={600} height={600} alt={`Capa do episódio ${ep.title}`} loading="eager" fetchPriority="high" className="aspect-square w-full object-cover" />
           ) : (
-            <img src={media.cover.src} srcSet={media.cover.srcSet} sizes="(min-width:1024px) 340px, 80vw" width={600} height={600} alt="Capa oficial Rodeo Country Podcasts" className="aspect-square w-full object-cover" />
+            <img src={media.cover.src} srcSet={media.cover.srcSet} sizes="(min-width:1024px) 340px, 80vw" width={600} height={600} alt="Capa oficial Rodeo Country Podcasts" loading="eager" fetchPriority="high" decoding="async" className="aspect-square w-full object-cover" />
           )}
           <div aria-hidden className="pointer-events-none absolute inset-0 bg-[linear-gradient(125deg,rgb(255_240_210/0.18),transparent_35%,transparent_70%,rgb(255_220_160/0.08))]" />
         </div>

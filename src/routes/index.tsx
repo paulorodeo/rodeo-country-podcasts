@@ -4,6 +4,7 @@ import { feedQuery } from "@/lib/feed.functions";
 import { Hero } from "@/components/home/Hero";
 import { DiscoverAndRecent, LonghornStage, Programs, RssSection } from "@/components/home/Sections";
 import { media } from "@/lib/media";
+import heroFontUrl from "@fontsource/playfair-display/files/playfair-display-latin-700-normal.woff2?url";
 
 export const Route = createFileRoute("/")({
   loader: ({ context }) => context.queryClient.ensureQueryData(feedQuery),
@@ -19,7 +20,10 @@ export const Route = createFileRoute("/")({
       { name: "twitter:image", content: media.studio.src },
       { property: "og:url", content: "/" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [
+      { rel: "canonical", href: "/" },
+      { rel: "preload", href: heroFontUrl, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
+    ],
   }),
   component: Home,
 });

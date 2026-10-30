@@ -10,33 +10,102 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProgramasRouteImport } from './routes/programas'
+import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
+import { Route as SobreRouteImport } from './routes/sobre'
+import { Route as EpisodiosIndexRouteImport } from './routes/episodios.index'
+import { Route as EpisodiosSlugRouteImport } from './routes/episodios.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProgramasRoute = ProgramasRouteImport.update({
+  id: '/programas',
+  path: '/programas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RssDotxmlRoute = RssDotxmlRouteImport.update({
+  id: '/rss.xml',
+  path: '/rss.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SobreRoute = SobreRouteImport.update({
+  id: '/sobre',
+  path: '/sobre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EpisodiosIndexRoute = EpisodiosIndexRouteImport.update({
+  id: '/episodios/',
+  path: '/episodios/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EpisodiosSlugRoute = EpisodiosSlugRouteImport.update({
+  id: '/episodios/$slug',
+  path: '/episodios/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/programas': typeof ProgramasRoute
+  '/rss.xml': typeof RssDotxmlRoute
+  '/sobre': typeof SobreRoute
+  '/episodios/$slug': typeof EpisodiosSlugRoute
+  '/episodios/': typeof EpisodiosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/programas': typeof ProgramasRoute
+  '/rss.xml': typeof RssDotxmlRoute
+  '/sobre': typeof SobreRoute
+  '/episodios/$slug': typeof EpisodiosSlugRoute
+  '/episodios': typeof EpisodiosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/programas': typeof ProgramasRoute
+  '/rss.xml': typeof RssDotxmlRoute
+  '/sobre': typeof SobreRoute
+  '/episodios/$slug': typeof EpisodiosSlugRoute
+  '/episodios/': typeof EpisodiosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/programas'
+    | '/rss.xml'
+    | '/sobre'
+    | '/episodios/$slug'
+    | '/episodios/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/programas'
+    | '/rss.xml'
+    | '/sobre'
+    | '/episodios/$slug'
+    | '/episodios'
+  id:
+    | '__root__'
+    | '/'
+    | '/programas'
+    | '/rss.xml'
+    | '/sobre'
+    | '/episodios/$slug'
+    | '/episodios/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ProgramasRoute: typeof ProgramasRoute
+  RssDotxmlRoute: typeof RssDotxmlRoute
+  SobreRoute: typeof SobreRoute
+  EpisodiosSlugRoute: typeof EpisodiosSlugRoute
+  EpisodiosIndexRoute: typeof EpisodiosIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +117,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/programas': {
+      id: '/programas'
+      path: '/programas'
+      fullPath: '/programas'
+      preLoaderRoute: typeof ProgramasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rss.xml': {
+      id: '/rss.xml'
+      path: '/rss.xml'
+      fullPath: '/rss.xml'
+      preLoaderRoute: typeof RssDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sobre': {
+      id: '/sobre'
+      path: '/sobre'
+      fullPath: '/sobre'
+      preLoaderRoute: typeof SobreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/episodios/': {
+      id: '/episodios/'
+      path: '/episodios'
+      fullPath: '/episodios/'
+      preLoaderRoute: typeof EpisodiosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/episodios/$slug': {
+      id: '/episodios/$slug'
+      path: '/episodios/$slug'
+      fullPath: '/episodios/$slug'
+      preLoaderRoute: typeof EpisodiosSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ProgramasRoute: ProgramasRoute,
+  RssDotxmlRoute: RssDotxmlRoute,
+  SobreRoute: SobreRoute,
+  EpisodiosSlugRoute: EpisodiosSlugRoute,
+  EpisodiosIndexRoute: EpisodiosIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { CHANNELS_URL, PORTAL_URL, PUBLIC_RSS_URL, RADIO_URL, TOPLEO_URL, TV_URL } from "@/lib/media";
 
-const footerSource = readFileSync(new URL("../components/site/SiteFooter.tsx", import.meta.url), "utf8");
-const headerSource = readFileSync(new URL("../components/site/SiteHeader.tsx", import.meta.url), "utf8");
+const footerSource = readFileSync("src/components/site/SiteFooter.tsx", "utf8");
+const headerSource = readFileSync("src/components/site/SiteHeader.tsx", "utf8");
 
 describe("Rodeo Country ecosystem links", () => {
   it("points radio at the canonical radio Worker and keeps stations separate", () => {

@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - feat/rss-cloudflare-homologacao
+      - main
     paths:
       - 'scripts/vendor-lovable-assets.py'
       - 'src/assets/**'
@@ -13,7 +14,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: vendor-lovable-assets
+  group: vendor-lovable-assets-${{ github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -36,4 +37,4 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'fix(images): vendor Lovable source media for independent Cloudflare hosting'
-          git push origin HEAD:feat/rss-cloudflare-homologacao
+          git push origin "HEAD:${GITHUB_REF_NAME}"

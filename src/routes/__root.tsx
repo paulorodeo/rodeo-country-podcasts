@@ -8,14 +8,16 @@ import {
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { PlayerProvider } from "../lib/player";
+import { PlayerProvider, usePlayer } from "../lib/player";
 import { SiteHeader } from "../components/site/SiteHeader";
 import { SiteFooter } from "../components/site/SiteFooter";
-import { MiniPlayer } from "../components/player/MiniPlayer";
+// The sticky player is needed only after a visitor chooses an episode.
+// Keep its controls and icon dependencies out of the initial hydration chunk.
+const MiniPlayer = lazy(() => import("../components/player/MiniPlayer").then((module) => ({ default: module.MiniPlayer })));
 
 function NotFoundComponent() {
   return (
@@ -118,6 +120,12 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function DeferredMiniPlayer() {
+  const { current } = usePlayer();
+  if (!current) return null;
+  return <Suspense fallback={null}><MiniPlayer /></Suspense>;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
@@ -131,7 +139,7 @@ function RootComponent() {
           <Outlet />
         </main>
         <SiteFooter />
-        <MiniPlayer />
+        <DeferredMiniPlayer />
       </PlayerProvider>
     </QueryClientProvider>
   );

@@ -4,6 +4,21 @@ import { serveRss, type PodcastRssKV } from "./lib/rss-response.server";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 
+/**
+ * Nitro's Cloudflare adapter does not forward the binding as the second
+ * argument of the TanStack server entry. Read the native Workers env instead.
+ */
+async function getPodcastKv(directEnv: unknown): Promise<PodcastRssKV | undefined> {
+  const direct = (directEnv as { PODCAST_RSS_KV?: PodcastRssKV } | undefined)?.PODCAST_RSS_KV;
+  if (direct) return direct;
+  try {
+    const runtime = await import("cloudflare:workers");
+    return (runtime.env as unknown as { PODCAST_RSS_KV?: PodcastRssKV }).PODCAST_RSS_KV;
+  } catch {
+    return (process.env as unknown as { PODCAST_RSS_KV?: PodcastRssKV }).PODCAST_RSS_KV;
+  }
+}
+
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
 };
@@ -49,7 +64,7 @@ export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     const url = new URL(request.url);
     if (request.method === "GET" && url.pathname === "/healthz") {
-      const bound = Boolean((env as { PODCAST_RSS_KV?: PodcastRssKV } | undefined)?.PODCAST_RSS_KV);
+      const bound = Boolean(await getPodcastKv(env));
       return Response.json({ status: "ok", service: "rodeo-country-podcasts", rssStoreBound: bound }, {
         headers: { "cache-control": "no-store" },
       });
@@ -59,7 +74,7 @@ export default {
     }
     if (request.method === "GET" && url.pathname === "/rss.xml") {
       const { loadFeed } = await import("./lib/feed.server");
-      const kv = (env as { PODCAST_RSS_KV?: PodcastRssKV } | undefined)?.PODCAST_RSS_KV;
+      const kv = await getPodcastKv(env);
       return serveRss(loadFeed, kv);
     }
     try {

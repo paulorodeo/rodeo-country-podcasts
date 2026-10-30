@@ -10,7 +10,7 @@ export function SiteFooter() {
       <div className="hairline-gold" />
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 lg:grid-cols-[1.3fr_0.65fr_1fr_1.05fr_0.75fr]">
         <div>
-          <FazendaLogo className="w-[160px]" />
+          <FazendaLogo className="w-[180px]" />
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted-foreground">
             Música. Rodeio. Cultura. Pessoas reais. Rodeo Country Media é a casa de mídia e entretenimento da Fazenda Rodeo.
           </p>

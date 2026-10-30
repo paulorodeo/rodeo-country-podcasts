@@ -21,5 +21,11 @@ export function Wordmark({ className = "" }: { className?: string }) {
 }
 
 export function FazendaLogo({ className = "" }: { className?: string }) {
-  return <img src={media.logo} width={180} height={56} alt="Fazenda Rodeo" className={`h-auto ${className}`} />;
+  return (
+    <picture>
+      <source type="image/avif" srcSet="/media/logo-fazenda-rodeo.avif" />
+      <source type="image/webp" srcSet="/media/logo-fazenda-rodeo.webp" />
+      <img src={media.logo} width={180} height={56} alt="Fazenda Rodeo" className={`h-auto ${className}`} />
+    </picture>
+  );
 }

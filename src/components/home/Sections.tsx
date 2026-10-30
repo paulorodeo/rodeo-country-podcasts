@@ -7,6 +7,18 @@ import { DemoCard, EpisodeCard } from "@/components/episodes/EpisodeCard";
 import { LonghornMark } from "@/components/site/Brand";
 import { Button } from "@/components/ui/button";
 
+/** Non-hero home content is isolated from the initial route entry chunk. */
+export default function HomeSections({ feed }: { feed: PodcastFeed }) {
+  return (
+    <>
+      <DiscoverAndRecent feed={feed} />
+      <Programs />
+      <LonghornStage />
+      <RssSection />
+    </>
+  );
+}
+
 export function SectionHead({ kicker, title, desc, link, titleClassName }: { kicker: string; title: string; desc?: string; link?: React.ReactNode; titleClassName?: string }) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">

@@ -1,10 +1,37 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { lazy, Suspense } from "react";
 import { feedQuery } from "@/lib/feed.functions";
 import { Hero } from "@/components/home/Hero";
-import { DiscoverAndRecent, LonghornStage, Programs, RssSection } from "@/components/home/Sections";
 import { media } from "@/lib/media";
 import heroFontUrl from "@fontsource/playfair-display/files/playfair-display-latin-700-normal.woff2?url";
+
+// SSR keeps the complete page HTML. In the browser, the non-hero chunk is fetched
+// when its SSR-rendered region approaches the viewport, rather than during startup.
+const HomeSections = lazy(() => {
+  if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
+    return import("@/components/home/Sections");
+  }
+
+  return new Promise<typeof import("@/components/home/Sections")>((resolve, reject) => {
+    const sentinel = document.getElementById("home-sections-sentinel");
+    if (!sentinel) {
+      import("@/components/home/Sections").then(resolve, reject);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          import("@/components/home/Sections").then(resolve, reject);
+        }
+      },
+      { rootMargin: "0px" },
+    );
+    observer.observe(sentinel);
+  });
+});
 
 export const Route = createFileRoute("/")({
   loader: ({ context }) => context.queryClient.ensureQueryData(feedQuery),
@@ -37,10 +64,11 @@ function Home() {
   return (
     <>
       <Hero feed={feed} />
-      <DiscoverAndRecent feed={feed} />
-      <Programs />
-      <LonghornStage />
-      <RssSection />
+      <div id="home-sections-sentinel">
+        <Suspense fallback={null}>
+          <HomeSections feed={feed} />
+        </Suspense>
+      </div>
     </>
   );
 }

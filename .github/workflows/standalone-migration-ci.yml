@@ -36,3 +36,22 @@ jobs:
         run: |
           test -f wrangler.jsonc
           grep -q '"PODCAST_RSS_KV"' wrangler.jsonc
+      - name: Worker preview smoke test (health, RSS alias, media)
+        run: |
+          bun run preview --host 127.0.0.1 --port 8788 > /tmp/rodeo-preview.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          ready=0
+          for i in $(seq 1 40); do
+            if curl --silent --fail http://127.0.0.1:8788/healthz -o /tmp/rodeo-health.json; then
+              ready=1
+              break
+            fi
+            sleep 2
+          done
+          if [ "$ready" -ne 1 ]; then cat /tmp/rodeo-preview.log; exit 1; fi
+          grep -q '"status":"ok"' /tmp/rodeo-health.json
+          curl --silent --show-error -D /tmp/rss-headers.txt -o /dev/null http://127.0.0.1:8788/rss
+          grep -Eq '^HTTP/[0-9.]+ 301' /tmp/rss-headers.txt
+          curl --fail --silent --show-error -o /tmp/studio.webp http://127.0.0.1:8788/media/studio-780.webp
+          test "$(wc -c < /tmp/studio.webp)" -gt 20000

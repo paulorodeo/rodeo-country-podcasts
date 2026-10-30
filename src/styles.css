@@ -93,6 +93,56 @@
   --gold-edge: linear-gradient(135deg, #f7e5b4, #a47534 30%, #6f451f 55%, #e8bc65 80%, #7b4a22);
   --shadow-amber: 0 10px 30px -12px color-mix(in oklab, var(--rodeo-bright-gold) 45%, transparent);
   --shadow-deep: 0 24px 60px -24px rgb(0 0 0 / 0.85);
+  --brand-name: #f0dfc8;
+  --brand-signature: #d4ad78;
+  --editorial-heading: #f5e9d9;
+  --stage-background: #0a0807;
+  --stage-border: rgba(215, 168, 111, .21);
+  --stage-light: radial-gradient(40% 29% at 50% 36%, #8e521c3d, transparent), radial-gradient(60% 55% at 50% 42%, #58301a38, transparent);
+  --program-border: #8b5f37;
+  --program-background: #382116;
+  --program-kicker: #e5bd84;
+  --program-caption: #e1c4a8;
+  --program-shade: linear-gradient(180deg, #10080518, #120b07cb);
+  --program-text-shadow: 0 3px 15px #000;
+  --program-shadow: 0 6px 20px #0003;
+  --subscribe-shade: linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--stage-background) 25%, transparent) 25%, color-mix(in oklab, var(--stage-background) 88%, transparent) 52%, var(--stage-background) 75%);
+}
+
+.brand-name { font-family: var(--font-condensed); font-weight: 700; font-size: 19px; letter-spacing: 0; color: var(--brand-name); white-space: nowrap; }
+.brand-signature { font-family: var(--font-sans); font-weight: 800; font-size: 8px; letter-spacing: 0; color: var(--brand-signature); white-space: nowrap; }
+.editorial-title { font-family: var(--font-display); font-weight: 700; font-size: 31px; line-height: 1.17; letter-spacing: 0; color: var(--editorial-heading); text-wrap: balance; }
+.longhorn-stage { min-height: 0; background: var(--stage-light), var(--stage-background); border-block: 1px solid var(--stage-border); }
+.stage-kicker { font-family: var(--font-sans); font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0; color: var(--brand-signature); }
+.stage-title { font-family: var(--font-display); font-weight: 600; font-size: 32px; line-height: 1.16; letter-spacing: 0; color: var(--editorial-heading); text-wrap: balance; }
+.program-card { position: relative; height: 224px; overflow: hidden; border: 1px solid var(--program-border); border-radius: 5px; background: var(--program-background); box-shadow: var(--program-shadow); }
+.program-image { position: absolute; inset: 0; height: 100%; width: 100%; object-fit: cover; filter: brightness(.78) saturate(.78); transition: transform .5s ease; }
+.program-card:hover .program-image { transform: scale(1.08); }
+.program-shade { position: absolute; inset: 0; background: var(--program-shade); }
+.program-kicker { font-family: var(--font-sans); font-weight: 700; font-size: 9px; text-transform: uppercase; letter-spacing: 0; color: var(--program-kicker); }
+.program-name { font-family: var(--font-condensed); font-weight: 700; font-size: 24px; line-height: .92; text-transform: uppercase; letter-spacing: 0; color: var(--editorial-heading); text-shadow: var(--program-text-shadow); }
+.program-caption { font-family: var(--font-sans); font-weight: 800; font-size: 9px; text-transform: uppercase; letter-spacing: 0; color: var(--program-caption); }
+.subscribe-section { background: var(--stage-background); }
+.subscribe-image { position: absolute; inset: 0; z-index: -1; height: 100%; width: 100%; object-fit: cover; object-position: center 38%; opacity: .65; }
+.subscribe-shade { background: linear-gradient(180deg, color-mix(in oklab, var(--stage-background) 55%, transparent), color-mix(in oklab, var(--stage-background) 75%, transparent)); }
+@media (min-width: 640px) {
+  .brand-name { font-size: 25px; }
+  .brand-signature { font-size: 9px; }
+  .editorial-title { font-size: 40px; }
+  .stage-title { font-size: 46px; }
+  .program-name { font-size: 30px; }
+}
+@media (min-width: 768px) {
+  .subscribe-image { left: -8vw; right: 35%; width: calc(65% + 8vw); object-position: left center; opacity: .82; }
+  .subscribe-shade { background: var(--subscribe-shade); }
+}
+@media (min-width: 1024px) {
+  .brand-name { font-size: 27px; }
+  .editorial-title { font-size: 46px; }
+  .longhorn-stage { min-height: 620px; }
+  .stage-title { font-size: 59px; }
+  .program-card { height: 194px; }
+  .program-name { font-size: 34px; }
 }
 
 @utility font-display { font-family: var(--font-display); }

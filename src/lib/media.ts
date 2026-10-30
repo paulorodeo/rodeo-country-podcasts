@@ -31,7 +31,11 @@ export const media = {
   logo: logo.url,
 };
 
-export const RADIO_URL = "https://country.fazenda.rodeo";
+export const RADIO_URL = "https://radio.fazenda.rodeo";
+export const PORTAL_URL = "https://portal.fazenda.rodeo/";
+export const TV_URL = "https://tv.fazenda.rodeo/";
+export const CHANNELS_URL = "https://country.fazenda.rodeo/station/";
+export const TOPLEO_URL = "https://www.topleo.workers.dev/";
 export const PUBLIC_RSS_URL = "https://podcast.fazenda.rodeo/rss.xml";
 /** Only services with real, confirmed URLs are rendered. Fill when available. */
 export const DISTRIBUTION: { name: string; href: string }[] = [];

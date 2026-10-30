@@ -53,3 +53,13 @@ jobs:
           curl -sS --max-time 25 -o /tmp/rodeo-custom-rss.xml -w "CUSTOM RSS HTTP %{http_code} type %{content_type}\\n" "$SITE/rss.xml"
           curl -sS --max-time 25 "$SITE/healthz" | tee /tmp/rodeo-health.json
           python3 scripts/validate-rss.py "$SITE/rss.xml"
+
+      - name: Validate live ecosystem links, RSS icon and single radio CTA
+        run: |
+          curl --fail --silent --show-error --location --retry 5 --retry-all-errors --retry-delay 3 --max-time 35             https://podcast.fazenda.rodeo/ -o /tmp/rodeo-live.html
+          for url in             'https://portal.fazenda.rodeo/'             'https://radio.fazenda.rodeo'             'https://tv.fazenda.rodeo/'             'https://country.fazenda.rodeo/station/'             'https://www.topleo.workers.dev/'             'https://podcast.fazenda.rodeo/rss.xml'; do
+            grep -Fq "href=\"$url\"" /tmp/rodeo-live.html || { echo "Missing footer href: $url"; exit 1; }
+            echo "Verified link: $url"
+          done
+          grep -Fq 'lucide-rss' /tmp/rodeo-live.html || { echo 'Missing RSS icon'; exit 1; }
+          echo 'RSS icon present'

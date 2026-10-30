@@ -34,3 +34,12 @@ jobs:
           if test -f .output/server/wrangler.json; then
             node -e 'const j=require("./.output/server/wrangler.json"); console.log(JSON.stringify({name:j.name,main:j.main,assets:j.assets,compatibility_date:j.compatibility_date},null,2))'
           fi
+
+      - name: Validate published Worker HTTP (diagnostic)
+        continue-on-error: true
+        run: |
+          BASE="https://paulorodeo-rodeo-country-podcasts.pjdigital.workers.dev"
+          curl -sS -L --max-time 25 -o /tmp/rodeo-home.html -w "HOME HTTP %{http_code} total %{time_total}s\\n" "$BASE/"
+          curl -sS -L --max-time 25 -o /tmp/rodeo-rss.xml -w "RSS HTTP %{http_code} type %{content_type}\\n" "$BASE/rss.xml"
+          curl -sS --max-time 25 -o /dev/null -w "RSS ALIAS HTTP %{http_code} redirect %{redirect_url}\\n" "$BASE/rss"
+          grep -q '<rss' /tmp/rodeo-rss.xml

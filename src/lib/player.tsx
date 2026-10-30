@@ -70,7 +70,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       on("playing", () => setStatus("playing")),
       on("pause", () => setStatus((s) => (s === "error" ? s : "paused"))),
       on("waiting", () => setStatus("loading")),
-      on("timeupdate", () => setTime(a.currentTime)),
+      on("timeupdate", () => setTime((prev) => { const second = Math.floor(a.currentTime); return prev === second ? prev : second; })),
       on("loadedmetadata", () => Number.isFinite(a.duration) && setDuration(a.duration)),
       on("ended", () => setStatus("paused")),
       on("error", () => {

@@ -47,7 +47,9 @@ export function SiteFooter() {
       <div className="border-t border-border/60">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-6 text-xs text-muted-foreground sm:px-6 md:flex-row">
           <p>© {year} Fazenda Rodeo / Rodeo Country Media.</p>
-          <p className="font-display text-sm text-ivory">podcast.<span className="text-gold">fazenda</span>.rodeo</p>
+          <a href="https://paulo.fazenda.rodeo" target="_blank" rel="noopener noreferrer" className="inline-flex items-center transition-opacity hover:opacity-80" aria-label="Paulo Rodeo (abre em nova aba)">
+            <img src="https://country.fazenda.rodeo/wp-content/uploads/2026/05/pr-logotipo.webp" alt="Paulo Rodeo" className="h-7 w-auto max-w-[180px] object-contain" loading="lazy" decoding="async" />
+          </a>
           <p className="flex items-center gap-2">
             Tecnologia e experiência digital por <a href={TOPLEO_URL} target="_blank" rel="noopener noreferrer" className="font-semibold text-champagne underline decoration-gold/40 underline-offset-4 transition-colors hover:text-bright-gold hover:decoration-gold">TopLeo Workers<span className="sr-only"> (abre em nova aba)</span></a>
             {CREDIT_LOGO_URL && <img src={CREDIT_LOGO_URL} alt="" className="h-4 w-auto" />}

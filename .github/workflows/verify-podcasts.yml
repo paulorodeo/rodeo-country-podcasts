@@ -26,6 +26,8 @@ jobs:
         run: bun run test
       - name: Production build
         run: bun run build
+      - name: Bind podcast RSS KV
+        run: node scripts/prepare-worker.mjs
       - name: Print generated Worker metadata
         run: |
           find .output -maxdepth 4 -iname '*wrangler*' -print || true

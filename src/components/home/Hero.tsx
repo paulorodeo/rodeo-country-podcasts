@@ -120,7 +120,7 @@ function CoverObject({ ep }: { ep: Episode | undefined }) {
           <div aria-hidden className="pointer-events-none absolute inset-0 bg-[linear-gradient(125deg,rgb(255_240_210/0.18),transparent_35%,transparent_70%,rgb(255_220_160/0.08))]" />
         </div>
       </div>
-      <div aria-hidden className="mx-auto mt-3 h-6 w-4/5 rounded-[50%] bg-black/60 blur-xl" />
+      <div aria-hidden className="mx-auto -mt-2 h-6 w-4/5 rounded-[50%] bg-background/80 blur-xl" />
     </figure>
   );
 }

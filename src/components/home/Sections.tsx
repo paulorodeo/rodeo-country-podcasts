@@ -107,13 +107,14 @@ export function Programs() {
         <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {PROGRAMS.map((p) => (
             <li key={p.name}>
-              <Link to="/programas" className="group relative block aspect-[520/330] overflow-hidden rounded-lg border border-border shadow-[var(--shadow-deep)] hover:border-gold/70">
-                <img src={p.img} alt="" width={520} height={330} loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <span className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/40 to-transparent" />
-                <span className="absolute left-5 top-4 text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-champagne/80">{p.n} / Conceito</span>
-                <span className="absolute bottom-5 left-5 right-5">
-                  <span className="font-condensed text-gold-metal block text-3xl font-bold uppercase leading-none tracking-[0.04em]">{p.name}</span>
-                  <span className="mt-2 block text-[0.64rem] font-extrabold uppercase tracking-[0.18em] text-ivory">{p.tagline}</span>
+              <Link to="/programas" className="group block overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-deep)] transition-colors hover:border-gold/70">
+                <span className="block aspect-[520/330] overflow-hidden">
+                  <img src={p.img} alt="" width={520} height={330} loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                </span>
+                <span className="block border-t border-border p-5">
+                  <span className="text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-muted-foreground">{p.n} / Conceito · em breve</span>
+                  <span className="font-condensed text-gold-metal mt-1 block text-2xl font-bold uppercase leading-none tracking-[0.05em]">{p.name}</span>
+                  <span className="mt-2 block text-xs text-body">{p.tagline}</span>
                 </span>
               </Link>
             </li>

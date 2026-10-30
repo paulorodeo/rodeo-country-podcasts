@@ -14,3 +14,4 @@
 - `/rss.xml` re-packages the origin feed (real enclosure bytes, itunes:duration, pt-BR) because the origin emits invalid values.
 - The app's single `<audio>` lives in `PlayerProvider` in `__root.tsx` so playback survives SPA navigation; never add another audio element.
 - Images are CDN assets (`src/assets/*.asset.json`) referenced through `src/lib/media.ts` with srcset.
+- Reference-specific typography and section effects use named global CSS classes and semantic tokens; use fixed breakpoint font sizes rather than viewport-based scaling to keep mobile text stable.

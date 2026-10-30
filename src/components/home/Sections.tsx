@@ -5,13 +5,14 @@ import type { PodcastFeed } from "@/lib/feed.types";
 import { CATEGORY_LABELS, DEMO_EPISODES, DISTRIBUTION, PROGRAMS, PUBLIC_RSS_URL, media } from "@/lib/media";
 import { DemoCard, EpisodeCard } from "@/components/episodes/EpisodeCard";
 import { LonghornMark } from "@/components/site/Brand";
+import { Button } from "@/components/ui/button";
 
-export function SectionHead({ kicker, title, desc, link }: { kicker: string; title: string; desc?: string; link?: React.ReactNode }) {
+export function SectionHead({ kicker, title, desc, link, titleClassName }: { kicker: string; title: string; desc?: string; link?: React.ReactNode; titleClassName?: string }) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0">
         <p className="text-[0.7rem] font-extrabold uppercase tracking-[0.28em] text-gold">{kicker}</p>
-        <h2 className="mt-3 font-display text-3xl font-bold text-ivory sm:text-[2.6rem] sm:leading-tight">{title}</h2>
+        <h2 className={titleClassName ?? "mt-3 font-display text-3xl font-bold text-ivory sm:text-[2.6rem] sm:leading-tight"}>{title}</h2>
         {desc && <p className="mt-2 max-w-2xl text-body">{desc}</p>}
       </div>
       {link}
@@ -100,22 +101,22 @@ export function Programs() {
   return (
     <section aria-labelledby="programas" className="bg-background py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <SectionHead kicker="Nossos programas" title="Programas que contam grandes histórias"
+        <SectionHead kicker="Universos editoriais" title="Histórias que merecem ser contadas" titleClassName="editorial-title mt-3"
           desc="Quatro linhas editoriais em desenvolvimento. São categorias conceituais até a publicação do catálogo oficial."
           link={<Link to="/programas" className={linkCls}>Conheça os programas <ArrowRight className="h-4 w-4" /></Link>} />
         <span id="programas" className="sr-only">Programas</span>
         <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {PROGRAMS.map((p) => (
             <li key={p.name}>
-              <Link to="/programas" className="group block overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-deep)] transition-colors hover:border-gold/70">
-                <span className="block aspect-[520/330] overflow-hidden">
-                  <img src={p.img} alt="" width={520} height={330} loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <Link to="/programas" className="program-card group block">
+                <img src={p.img} alt="" width={520} height={330} loading="lazy" decoding="async" className="program-image" />
+                <span aria-hidden className="program-shade" />
+                <span className="program-kicker absolute left-5 top-5">{p.n} / Conceito · em breve</span>
+                <span className="absolute inset-x-5 bottom-5 block pr-4">
+                  <span className="program-name block">{p.name}</span>
+                  <span className="program-caption mt-3 block">{p.tagline}</span>
                 </span>
-                <span className="block border-t border-border p-5">
-                  <span className="text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-muted-foreground">{p.n} / Conceito · em breve</span>
-                  <span className="font-condensed text-gold-metal mt-1 block text-2xl font-bold uppercase leading-none tracking-[0.05em]">{p.name}</span>
-                  <span className="mt-2 block text-xs text-body">{p.tagline}</span>
-                </span>
+                <ArrowRight aria-hidden className="absolute bottom-5 right-4 h-4 w-4 text-champagne" />
               </Link>
             </li>
           ))}
@@ -127,16 +128,11 @@ export function Programs() {
 
 export function LonghornStage() {
   return (
-    <section aria-label="Rodeo Country Media" className="relative isolate overflow-hidden border-y border-border bg-[radial-gradient(70%_90%_at_50%_45%,#2a1a0f_0%,#0e0b09_70%)] py-20 sm:py-28">
-      <div aria-hidden className="absolute left-1/2 top-1/2 -z-10 h-[420px] w-[820px] max-w-[120vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse,rgb(232_188_101/0.22),transparent_65%)] blur-2xl" />
-      <div aria-hidden className="absolute inset-x-0 top-1/2 -z-10 hairline-gold opacity-25" />
-      <div className="mx-auto flex max-w-4xl flex-col items-center px-4 text-center">
+    <section aria-labelledby="spirit-title" className="longhorn-stage relative isolate flex items-center justify-center overflow-hidden py-16 sm:py-20">
+      <div className="mx-auto flex w-full max-w-4xl flex-col items-center px-4 text-center">
+        <p className="stage-kicker mb-8">The Spirit of the West — O espírito do campo</p>
         <LonghornMark className="h-auto w-[min(78vw,560px)] drop-shadow-[0_20px_40px_rgb(0_0_0/0.8)]" sizes="(min-width:640px) 560px, 78vw" />
-        <p className="mt-6 font-condensed text-gold-metal text-3xl font-bold uppercase tracking-[0.095em] sm:text-4xl">Rodeo Country</p>
-        <p className="mt-1 text-[0.66rem] font-extrabold uppercase tracking-[0.27em] text-champagne/80">Media · Podcasts</p>
-        <blockquote className="mt-10 max-w-2xl font-display text-2xl font-semibold leading-snug text-ivory sm:text-4xl">
-          “O country não é apenas música. <span className="text-bright-gold">É um jeito de viver.</span>”
-        </blockquote>
+        <h2 id="spirit-title" className="stage-title mt-8 max-w-4xl">O country não é apenas música. É um jeito de viver.</h2>
       </div>
     </section>
   );
@@ -154,21 +150,21 @@ export function RssSection() {
     }
   };
   return (
-    <section aria-labelledby="rss-title" className="relative isolate overflow-hidden">
+    <section aria-labelledby="rss-title" className="subscribe-section relative isolate overflow-hidden">
       <img src={media.sunset.src} srcSet={media.sunset.srcSet} sizes="100vw" width={1400} height={542} alt="Cowboy de costas observando o pôr do sol sobre a fazenda" loading="lazy" decoding="async"
-        className="absolute inset-0 -z-10 h-full w-full object-cover object-[30%_center]" />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background/70 via-background/60 to-background md:bg-gradient-to-r md:from-transparent md:via-background/50 md:to-background" />
+        className="subscribe-image" />
+      <div aria-hidden className="subscribe-shade absolute inset-0 -z-10" />
       <div className="mx-auto grid max-w-7xl px-4 py-20 sm:px-6 md:grid-cols-2 md:py-28">
         <div className="md:col-start-2">
           <p className="text-[0.7rem] font-extrabold uppercase tracking-[0.28em] text-gold">Não perca nenhum episódio</p>
-          <h2 id="rss-title" className="mt-3 font-display text-3xl font-bold text-ivory sm:text-[2.6rem] sm:leading-tight">Assine o RSS do nosso podcast</h2>
+           <h2 id="rss-title" className="editorial-title mt-3">O melhor do country. Direto no seu ouvido.</h2>
           <p className="mt-4 max-w-lg text-body">Receba nossos episódios no seu aplicativo de podcast favorito e leve a Rodeo Country com você.</p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a href={PUBLIC_RSS_URL} className="btn-gold"><Rss className="h-4 w-4" aria-hidden /> Assine o RSS</a>
-            <button type="button" onClick={copy} className="btn-leather">
+             <Button asChild className="btn-gold h-auto"><a href={PUBLIC_RSS_URL}><Rss className="h-4 w-4" aria-hidden /> Assine o RSS</a></Button>
+             <Button variant="outline" type="button" onClick={copy} className="btn-leather h-auto">
               {copied ? <Check className="h-4 w-4" aria-hidden /> : <Copy className="h-4 w-4" aria-hidden />}
               {copied ? "Endereço copiado" : "Copiar endereço"}
-            </button>
+             </Button>
             <span className="sr-only" aria-live="polite">{copied ? "Endereço do feed copiado" : ""}</span>
           </div>
           <p className="mt-4 break-all font-mono text-xs text-muted-foreground">{PUBLIC_RSS_URL}</p>

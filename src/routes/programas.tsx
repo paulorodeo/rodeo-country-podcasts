@@ -9,6 +9,7 @@ export const Route = createFileRoute("/programas")({
       { property: "og:title", content: "Programas — Rodeo Country Podcasts" },
       { property: "og:description", content: "Linhas editoriais conceituais da Rodeo Country Media." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: "/programas" },
     ],
     links: [{ rel: "canonical", href: "/programas" }],

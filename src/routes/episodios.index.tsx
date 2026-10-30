@@ -15,6 +15,7 @@ export const Route = createFileRoute("/episodios/")({
       { property: "og:title", content: "Episódios — Rodeo Country Podcasts" },
       { property: "og:description", content: "Todos os episódios publicados da Rodeo Country Media." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: "/episodios" },
     ],
     links: [{ rel: "canonical", href: "/episodios" }],

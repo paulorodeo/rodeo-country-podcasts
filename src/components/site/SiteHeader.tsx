@@ -2,7 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { Menu, Radio, Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { RADIO_URL } from "@/lib/media";
-import { FazendaLogo, LonghornMark, Wordmark } from "./Brand";
+import { LonghornMark, Wordmark } from "./Brand";
+import { Button } from "@/components/ui/button";
 
 const NAV = [
   { to: "/", label: "Início" },
@@ -31,12 +32,8 @@ export function SiteHeader() {
     <header className={`sticky top-0 z-50 transition-colors duration-500 ${solid ? "surface-wood shadow-[0_10px_30px_-15px_rgb(0_0_0/0.9)]" : "bg-gradient-to-b from-background/90 to-background/0"}`}>
       <div className="mx-auto grid h-[72px] max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 sm:px-6 lg:h-[84px] lg:grid-cols-[auto_1fr_auto]">
         <Link to="/" className="flex min-w-0 items-center gap-3" aria-label="Rodeo Country Podcasts — página inicial">
-          <FazendaLogo className="w-[118px] shrink-0 sm:w-[144px]" />
-          <span className="hidden h-8 w-px bg-border sm:block" aria-hidden />
-          <span className="hidden items-center gap-2 sm:flex">
-            <LonghornMark className="h-auto w-11 shrink-0" sizes="44px" eager />
-            <Wordmark className="hidden xl:flex" />
-          </span>
+          <LonghornMark className="h-auto w-14 shrink-0 sm:w-20" sizes="(min-width:640px) 80px, 56px" eager />
+          <Wordmark className="shrink-0" />
         </Link>
 
         <nav aria-label="Navegação principal" className="hidden justify-center gap-8 lg:flex">
@@ -60,10 +57,10 @@ export function SiteHeader() {
             <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-destructive motion-safe:animate-pulse" aria-hidden />
             <Radio className="h-4 w-4" />
           </a>
-          <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? "Fechar menu" : "Abrir menu"}
-            className="grid h-10 w-10 place-items-center rounded-md border border-border text-champagne lg:hidden">
+          <Button variant="outline" size="icon" type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? "Fechar menu" : "Abrir menu"}
+            className="h-10 w-10 text-champagne lg:hidden">
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          </Button>
         </div>
       </div>
       <div className="hairline-gold opacity-70" />

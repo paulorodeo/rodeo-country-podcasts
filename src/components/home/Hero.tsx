@@ -3,6 +3,7 @@ import { BarChart3, Calendar, Clock, Volume2 } from "lucide-react";
 import type { Episode, PodcastFeed } from "@/lib/feed.types";
 import { fmtDate, fmtDuration, fmtTime } from "@/lib/format";
 import { media } from "@/lib/media";
+import { episodeExcerpt } from "@/lib/episodeExcerpt";
 import { usePlayer } from "@/lib/player";
 import { PlayButton } from "@/components/player/PlayButton";
 
@@ -41,7 +42,7 @@ function EpisodeIntro({ ep }: { ep: Episode }) {
         </h1>
       </div>
       <div className="order-3 lg:order-none">
-        {ep.description && <p className="mt-5 max-w-xl text-base leading-relaxed text-body sm:text-lg">{ep.description}</p>}
+        {ep.description && <p className="mt-5 max-w-xl text-base leading-7 text-body line-clamp-4 sm:text-base sm:leading-7">{episodeExcerpt(ep.description)}</p>}
         <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[0.7rem] font-bold uppercase tracking-[0.14em] text-champagne">
           {date && <li className="flex items-center gap-2"><Calendar className="h-4 w-4 text-gold" aria-hidden /><time dateTime={ep.pubDate!}>{date}</time></li>}
           {dur && <li className="flex items-center gap-2"><Clock className="h-4 w-4 text-gold" aria-hidden />{dur}</li>}
@@ -49,7 +50,7 @@ function EpisodeIntro({ ep }: { ep: Episode }) {
         </ul>
         <HeroPlayer ep={ep} />
         <Link to="/episodios/$slug" params={{ slug: ep.slug }} className="mt-5 inline-block text-xs font-bold uppercase tracking-[0.18em] text-gold underline-offset-4 hover:underline">
-          Página do episódio →
+          Ler descrição completa →
         </Link>
       </div>
     </div>

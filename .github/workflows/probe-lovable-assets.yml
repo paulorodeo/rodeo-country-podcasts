@@ -1,0 +1,31 @@
+name: Diagnose Lovable image origins
+on:
+  push:
+    branches: [feat/rss-cloudflare-homologacao]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe source asset from Lovable domains
+        shell: bash
+        run: |
+          ASSET='/__l5e/assets-v1/9b49db06-7649-4d41-90a2-83ed659600fd/longhorn-1600.avif'
+          for DOMAIN in \
+            'project--a14659df-327f-4f47-8c7f-250c7fb5a52f.lovable.app' \
+            'project--a14659df-327f-4f47-8c7f-250c7fb5a52f-dev.lovable.app' \
+            'id-preview--a14659df-327f-4f47-8c7f-250c7fb5a52f.lovable.app' \
+            'rodeo-country-podcasts.lovable.app' \
+            'preview--rodeo-country-podcasts.lovable.app'; do
+            printf 'ORIGIN %s : ' "$DOMAIN"
+            curl -L -sS --max-time 15 --output /tmp/test-img \
+              -w 'code=%{http_code} type=%{content_type} bytes=%{size_download} final=%{url_effective}\\n' \
+              "https://$DOMAIN$ASSET" || true
+            file -b --mime-type /tmp/test-img || true
+          done
+          echo "BLOB available in earlier v0.3 project locally but needs hosting-independent import."

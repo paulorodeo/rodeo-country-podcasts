@@ -70,7 +70,7 @@ function HeroPlayer({ ep }: { ep: Episode }) {
           <div className="absolute inset-0 flex items-center gap-[3px]">
             {Array.from({ length: 48 }, (_, i) => (
               <span key={i} className={`flex-1 rounded-full ${i / 48 * 100 < pct ? "bg-bright-gold" : "bg-muted-foreground/30"}`}
-                style={{ height: `${25 + Math.abs(Math.sin(i * 1.7) * 60 + Math.cos(i * 0.6) * 15)}%` }} />
+                style={{ height: `${Math.round(25 + Math.abs(Math.sin(i * 1.7) * 60 + Math.cos(i * 0.6) * 15))}%` }} />
             ))}
           </div>
         </div>

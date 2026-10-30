@@ -75,7 +75,7 @@ export default {
     if (request.method === "GET" && url.pathname === "/rss.xml") {
       const { loadFeed } = await import("./lib/feed.server");
       const kv = await getPodcastKv(env);
-      return serveRss(loadFeed, kv);
+      return serveRss(() => loadFeed({ probeMedia: true }), kv);
     }
     try {
       const handler = await getServerEntry();

@@ -27,11 +27,12 @@ jobs:
         run: python3 scripts/check-published-assets.py --local
       - name: Audit repository for legacy editor dependencies
         run: |
-          if git grep -n -i -E 'lovable|__l5e|gpt.engineer' -- .; then
+          banned="$(printf '%s%s|__%s|gpt%s' 'lova' 'ble' 'l5e' '.engineer')"
+          if git grep -n -i -E "$banned" -- .; then
             echo "Legacy editor references remain in tracked files" >&2
             exit 1
           fi
-          if git ls-files | grep -E '(^|/)(\\.lovable|__l5e)(/|$)'; then
+          if git ls-files | grep -E "(^|/)(\\.lo""vable|__l""5e)(/|$)"; then
             echo "Legacy editor asset paths remain in tracked files" >&2
             exit 1
           fi

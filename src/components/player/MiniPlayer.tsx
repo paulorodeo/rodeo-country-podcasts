@@ -2,8 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { RotateCcw, RotateCw, Volume2, X } from "lucide-react";
 import { fmtTime } from "@/lib/format";
 import { usePlayer } from "@/lib/player";
-import { media } from "@/lib/media";
 import { PlayButton } from "./PlayButton";
+import { EpisodeCoverImage } from "@/components/episodes/EpisodeCoverImage";
 
 const RATES = [1, 1.25, 1.5, 2, 0.75];
 
@@ -17,7 +17,7 @@ export function MiniPlayer() {
       <section aria-label="Player de áudio" className="fixed inset-x-0 bottom-0 z-40 surface-leather border-t border-border pb-[env(safe-area-inset-bottom)] shadow-[0_-12px_40px_-12px_rgb(0_0_0/0.9)]">
         <div className="hairline-gold absolute inset-x-0 top-0" />
         <div className="mx-auto flex max-w-7xl items-center gap-3 px-3 py-3 sm:gap-5 sm:px-6">
-          <img src={ep.image ?? media.cover.src} alt={`Capa do episódio ${ep.title}`} width={48} height={48} className="h-12 w-12 shrink-0 rounded border border-border object-cover" />
+          <EpisodeCoverImage ep={ep} width={48} height={48} loading="lazy" wrapperClassName="block h-12 w-12 shrink-0" className="h-12 w-12 rounded border border-border object-cover" />
           <div className="min-w-0 flex-1">
             <Link to="/episodios/$slug" params={{ slug: ep.slug }} className="block truncate text-sm font-bold text-ivory hover:text-bright-gold">{ep.title}</Link>
             <p className="truncate text-[0.68rem] font-bold uppercase tracking-[0.16em] text-gold" aria-live="polite">

@@ -5,6 +5,7 @@ import { fmtDate, fmtDuration } from "@/lib/format";
 import { media, type DEMO_EPISODES } from "@/lib/media";
 import { usePlayer } from "@/lib/player";
 import { PlayButton } from "@/components/player/PlayButton";
+import { EpisodeCoverImage } from "./EpisodeCoverImage";
 
 const card = "group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-deep)] transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-gold/70";
 
@@ -14,7 +15,7 @@ export function EpisodeCard({ ep }: { ep: Episode }) {
   return (
     <article className={card}>
       <div className="relative aspect-[460/395] overflow-hidden">
-        <img src={ep.image ?? media.cover.src} alt={`Capa do episódio ${ep.title}`} width={460} height={395} loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+        <EpisodeCoverImage ep={ep} width={460} height={395} loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-t from-card via-card/10 to-transparent" />
         <div className="absolute bottom-3 left-3"><PlayButton ep={ep} size="md" /></div>
         {active && <span className="absolute right-3 top-3 rounded bg-background/80 px-2 py-1 text-[0.62rem] font-extrabold uppercase tracking-[0.16em] text-bright-gold">▶ Tocando</span>}

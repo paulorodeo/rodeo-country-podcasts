@@ -6,6 +6,7 @@ import { media } from "@/lib/media";
 import { episodeExcerpt } from "@/lib/episodeExcerpt";
 import { usePlayer } from "@/lib/player";
 import { PlayButton } from "@/components/player/PlayButton";
+import { EpisodeCoverImage } from "@/components/episodes/EpisodeCoverImage";
 
 export function Hero({ feed }: { feed: PodcastFeed }) {
   const ep = feed.episodes[0];
@@ -114,7 +115,7 @@ function CoverObject({ ep }: { ep: Episode | undefined }) {
       <div className="relative rounded-md p-[3px] shadow-[var(--shadow-deep)]" style={{ background: "var(--gold-edge)" }}>
         <div className="relative overflow-hidden rounded-[5px] bg-charcoal">
           {ep?.image ? (
-            <img src={ep.image} width={600} height={600} alt={`Capa do episódio ${ep.title}`} loading="eager" fetchPriority="high" className="aspect-square w-full object-cover" />
+            <EpisodeCoverImage ep={ep} width={600} height={600} loading="eager" fetchPriority="high" className="aspect-square w-full object-cover" />
           ) : (
             <img src={media.cover.src} srcSet={media.cover.srcSet} sizes="(min-width:1024px) 340px, 80vw" width={600} height={600} alt="Capa oficial Rodeo Country Podcasts" loading="eager" fetchPriority="high" decoding="async" className="aspect-square w-full object-cover" />
           )}

@@ -4,6 +4,7 @@ import { feedQuery } from "@/lib/feed.functions";
 import { fmtDate, fmtDuration } from "@/lib/format";
 import { media } from "@/lib/media";
 import { PlayButton } from "@/components/player/PlayButton";
+import { EpisodeCoverImage } from "@/components/episodes/EpisodeCoverImage";
 
 /** SEO summaries are short plain text; keep the complete RSS description in the episode body. */
 function seoDescription(value: string | undefined): string {
@@ -50,7 +51,7 @@ function EpisodePage() {
     <article className="surface-wood py-14">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 md:grid-cols-[360px_1fr]">
         <div className="rounded-md p-[3px] shadow-[var(--shadow-deep)]" style={{ background: "var(--gold-edge)" }}>
-          <img src={ep.image ?? media.cover.src} width={600} height={600} alt={`Capa do episódio ${ep.title}`} loading="eager" fetchPriority="high" decoding="async" className="aspect-square w-full rounded-[5px] object-cover" />
+          <EpisodeCoverImage ep={ep} width={600} height={600} loading="eager" fetchPriority="high" decoding="async" className="aspect-square w-full rounded-[5px] object-cover" />
         </div>
         <div>
           <Link to="/episodios" className="text-xs font-bold uppercase tracking-[0.18em] text-gold hover:underline">← Episódios</Link>

@@ -9,7 +9,10 @@ export const CANONICAL_FEED_URL = "https://podcast.fazenda.rodeo/rss.xml";
 const TTL_MS = 5 * 60 * 1000;
 
 type Cache = { at: number; feed: PodcastFeed; xml: string | null };
+// Separate render cache from the fully normalized RSS: the homepage should never
+// wait for MP3 range probes just to render editorial content.
 let cache: Cache | null = null;
+let rssCache: Cache | null = null;
 const mediaCache = new Map<string, { bytes: number | null; duration: number | null }>();
 
 export function decodeEntities(s: string): string {
@@ -134,7 +137,7 @@ function parseDate(raw: string | null): string | null {
   return Number.isNaN(d.getTime()) ? null : d.toISOString();
 }
 
-export async function parseFeed(xml: string): Promise<PodcastFeed> {
+export async function parseFeed(xml: string, options: { probeMedia?: boolean } = {}): Promise<PodcastFeed> {
   const channel = xml.split(/<item[\s>]/i)[0] ?? "";
   const categories = Array.from(new Set([...channel.matchAll(/<category>([\s\S]*?)<\/category>/gi)].map((m) => decodeEntities((m[1] ?? "").trim()))));
   const items = [...xml.matchAll(/<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/gi)].map((m) => m[1] ?? "");
@@ -145,7 +148,7 @@ export async function parseFeed(xml: string): Promise<PodcastFeed> {
       const guid = tag(it, "guid") ?? attr(it, "enclosure", "url") ?? title;
       const audioUrl = attr(it, "enclosure", "url");
       const itDur = tag(it, "itunes:duration");
-      const probe = audioUrl ? await probeMedia(audioUrl) : { bytes: null, duration: null };
+      const probe = options.probeMedia && audioUrl ? await probeMedia(audioUrl) : { bytes: null, duration: null };
       let duration = probe.duration;
       if (!duration && itDur) {
         const parts = itDur.split(":").map(Number);
@@ -207,19 +210,26 @@ export function repackageXml(xml: string, feed: PodcastFeed): string {
   return out;
 }
 
-export async function loadFeed(): Promise<{ feed: PodcastFeed; xml: string | null }> {
-  if (cache && Date.now() - cache.at < TTL_MS) return cache;
+export async function loadFeed(options: { probeMedia?: boolean } = {}): Promise<{ feed: PodcastFeed; xml: string | null }> {
+  const normalized = options.probeMedia === true;
+  const activeCache = normalized ? rssCache : cache;
+  if (activeCache && Date.now() - activeCache.at < TTL_MS) return activeCache;
   try {
+    // Homepage SSR: one small RSS request only. RSS endpoint: probe MP3
+    // metadata so enclosure length remains valid for podcast directories.
     const res = await fetch(ORIGIN_FEED_URL, { headers: { Accept: "application/rss+xml, application/xml" } });
     if (!res.ok) throw new Error(`Feed HTTP ${res.status}`);
     const xml = await res.text();
     if (!/<rss[\s>]/i.test(xml) || !/<channel[\s>]/i.test(xml)) throw new Error("Feed XML inválido");
-    const feed = await parseFeed(xml);
-    cache = { at: Date.now(), feed, xml: repackageXml(xml, feed) };
-    return cache;
+    const feed = await parseFeed(xml, { probeMedia: normalized });
+    const result = { at: Date.now(), feed, xml: normalized ? repackageXml(xml, feed) : null };
+    if (normalized) rssCache = result;
+    else cache = result;
+    return result;
   } catch (e) {
     console.error("loadFeed failed", e);
-    if (cache) return cache; // last good copy beats nothing
+    // Never return unnormalized XML to the public RSS path.
+    if (activeCache) return activeCache; // last good copy beats nothing
     return {
       feed: {
         status: "unavailable",

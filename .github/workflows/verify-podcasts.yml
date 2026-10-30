@@ -44,3 +44,11 @@ jobs:
           curl -sS --max-time 25 -o /dev/null -w "RSS ALIAS HTTP %{http_code} redirect %{redirect_url}\\n" "$BASE/rss"
           grep -q '<rss' /tmp/rodeo-rss.xml
           python3 scripts/validate-rss.py
+
+      - name: Validate custom podcast domain (diagnostic)
+        continue-on-error: true
+        run: |
+          SITE="https://podcast.fazenda.rodeo"
+          curl -sS -L --max-time 25 -o /tmp/rodeo-custom-home.html -w "CUSTOM HOME HTTP %{http_code} total %{time_total}s\\n" "$SITE/"
+          curl -sS --max-time 25 -o /tmp/rodeo-custom-rss.xml -w "CUSTOM RSS HTTP %{http_code} type %{content_type}\\n" "$SITE/rss.xml"
+          python3 scripts/validate-rss.py "$SITE/rss.xml"

@@ -16,8 +16,10 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "Música country, rodeio e vida no campo em episódios da Rodeo Country Media." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:image", content: media.studio.src },
-      { name: "twitter:image", content: media.studio.src },
+      { property: "og:image", content: `https://podcast.fazenda.rodeo${media.studio.src}` },
+      { property: "og:image:alt", content: "Estúdio da Rodeo Country Media" },
+      { name: "twitter:image", content: `https://podcast.fazenda.rodeo${media.studio.src}` },
+      { name: "twitter:image:alt", content: "Estúdio da Rodeo Country Media" },
       { property: "og:url", content: "https://podcast.fazenda.rodeo/" },
     ],
     links: [

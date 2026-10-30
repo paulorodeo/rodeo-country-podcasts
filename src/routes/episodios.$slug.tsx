@@ -21,7 +21,7 @@ export const Route = createFileRoute("/episodios/$slug")({
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: `https://podcast.fazenda.rodeo/episodios/${encodeURIComponent(params.slug)}` },
-      ...(loaderData?.image?.startsWith("https://") ? [{ property: "og:image", content: loaderData.image }, { name: "twitter:image", content: loaderData.image }] : [{ property: "og:image", content: media.cover.src }, { name: "twitter:image", content: media.cover.src }]),
+      ...(loaderData?.image?.startsWith("https://") ? [{ property: "og:image", content: loaderData.image }, { name: "twitter:image", content: loaderData.image }] : [{ property: "og:image", content: `https://podcast.fazenda.rodeo${media.cover.src}` }, { name: "twitter:image", content: `https://podcast.fazenda.rodeo${media.cover.src}` }]),
     ],
     links: [{ rel: "canonical", href: `https://podcast.fazenda.rodeo/episodios/${encodeURIComponent(params.slug)}` }],
   }),

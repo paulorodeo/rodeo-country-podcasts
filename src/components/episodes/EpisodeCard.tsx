@@ -14,7 +14,7 @@ export function EpisodeCard({ ep }: { ep: Episode }) {
   return (
     <article className={card}>
       <div className="relative aspect-[460/395] overflow-hidden">
-        <img src={ep.image ?? media.cover.src} alt="" width={460} height={395} loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+        <img src={ep.image ?? media.cover.src} alt={`Capa do episódio ${ep.title}`} width={460} height={395} loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-t from-card via-card/10 to-transparent" />
         <div className="absolute bottom-3 left-3"><PlayButton ep={ep} size="md" /></div>
         {active && <span className="absolute right-3 top-3 rounded bg-background/80 px-2 py-1 text-[0.62rem] font-extrabold uppercase tracking-[0.16em] text-bright-gold">▶ Tocando</span>}
@@ -40,7 +40,7 @@ export function DemoCard({ d }: { d: (typeof DEMO_EPISODES)[number] }) {
   return (
     <article className={`${card} opacity-90`} aria-label={`Prévia de demonstração: ${d.title}`}>
       <div className="relative aspect-[460/395] overflow-hidden">
-        <img src={d.img} srcSet={d.srcSet} sizes="(min-width:1024px) 300px, (min-width:640px) 45vw, 90vw" alt="" width={460} height={395} loading="lazy" decoding="async" className="h-full w-full object-cover grayscale-[25%]" />
+        <img src={d.img} srcSet={d.srcSet} sizes="(min-width:1024px) 300px, (min-width:640px) 45vw, 90vw" alt={`Arte ilustrativa da prévia ${d.title}`} width={460} height={395} loading="lazy" decoding="async" className="h-full w-full object-cover grayscale-[25%]" />
         <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-card to-transparent" />
         <span className="absolute left-3 top-3 rounded border border-gold/60 bg-background/85 px-2 py-1 text-[0.6rem] font-extrabold uppercase tracking-[0.18em] text-champagne">Prévia · Demonstração</span>
       </div>

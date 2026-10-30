@@ -5,6 +5,7 @@ import { Search } from "lucide-react";
 import { feedQuery } from "@/lib/feed.functions";
 import { EpisodeCard } from "@/components/episodes/EpisodeCard";
 import { SectionHead } from "@/components/home/Sections";
+import { media } from "@/lib/media";
 
 export const Route = createFileRoute("/episodios/")({
   loader: ({ context }) => context.queryClient.ensureQueryData(feedQuery),
@@ -17,6 +18,9 @@ export const Route = createFileRoute("/episodios/")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: "https://podcast.fazenda.rodeo/episodios" },
+      { property: "og:image", content: `https://podcast.fazenda.rodeo${media.cover.src}` },
+      { property: "og:image:alt", content: "Rodeo Country Podcasts — catálogo de episódios" },
+      { name: "twitter:image", content: `https://podcast.fazenda.rodeo${media.cover.src}` },
     ],
     links: [{ rel: "canonical", href: "https://podcast.fazenda.rodeo/episodios" }],
   }),

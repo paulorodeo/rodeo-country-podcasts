@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Programs } from "@/components/home/Sections";
+import { media } from "@/lib/media";
 
 export const Route = createFileRoute("/programas")({
   head: () => ({
@@ -11,6 +12,9 @@ export const Route = createFileRoute("/programas")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: "https://podcast.fazenda.rodeo/programas" },
+      { property: "og:image", content: `https://podcast.fazenda.rodeo${media.cover.src}` },
+      { property: "og:image:alt", content: "Programas e universos editoriais da Rodeo Country Media" },
+      { name: "twitter:image", content: `https://podcast.fazenda.rodeo${media.cover.src}` },
     ],
     links: [{ rel: "canonical", href: "https://podcast.fazenda.rodeo/programas" }],
   }),

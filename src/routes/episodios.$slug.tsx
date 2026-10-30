@@ -5,6 +5,17 @@ import { fmtDate, fmtDuration } from "@/lib/format";
 import { media } from "@/lib/media";
 import { PlayButton } from "@/components/player/PlayButton";
 
+/** SEO summaries are short plain text; keep the complete RSS description in the episode body. */
+function seoDescription(value: string | undefined): string {
+  const text = (value || "Episódio da Rodeo Country Media.")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;|&#160;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/\s+/g, " ").trim();
+  return text.length > 155 ? text.slice(0, 152).trimEnd() + "…" : text;
+}
+
 export const Route = createFileRoute("/episodios/$slug")({
   loader: async ({ context, params }) => {
     const feed = await context.queryClient.ensureQueryData(feedQuery);
@@ -15,10 +26,12 @@ export const Route = createFileRoute("/episodios/$slug")({
   head: ({ params, loaderData }) => ({
     meta: [
       { title: loaderData ? `${loaderData.title} — Rodeo Country Podcasts` : "Episódio — Rodeo Country Podcasts" },
-      { name: "description", content: loaderData?.description || "Episódio da Rodeo Country Media." },
+      { name: "description", content: seoDescription(loaderData?.description) },
       { property: "og:title", content: loaderData?.title ?? "Episódio — Rodeo Country Podcasts" },
-      { property: "og:description", content: loaderData?.description || "Episódio da Rodeo Country Media." },
+      { property: "og:description", content: seoDescription(loaderData?.description) },
+      { name: "twitter:description", content: seoDescription(loaderData?.description) },
       { property: "og:type", content: "article" },
+      { property: "og:image:alt", content: `Capa do episódio ${loaderData?.title ?? "Rodeo Country Podcasts"}` },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: `https://podcast.fazenda.rodeo/episodios/${encodeURIComponent(params.slug)}` },
       ...(loaderData?.image?.startsWith("https://") ? [{ property: "og:image", content: loaderData.image }, { name: "twitter:image", content: loaderData.image }] : [{ property: "og:image", content: `https://podcast.fazenda.rodeo${media.cover.src}` }, { name: "twitter:image", content: `https://podcast.fazenda.rodeo${media.cover.src}` }]),
@@ -37,7 +50,7 @@ function EpisodePage() {
     <article className="surface-wood py-14">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 md:grid-cols-[360px_1fr]">
         <div className="rounded-md p-[3px] shadow-[var(--shadow-deep)]" style={{ background: "var(--gold-edge)" }}>
-          <img src={ep.image ?? media.cover.src} width={600} height={600} alt={`Capa do episódio ${ep.title}`} className="aspect-square w-full rounded-[5px] object-cover" />
+          <img src={ep.image ?? media.cover.src} width={600} height={600} alt={`Capa do episódio ${ep.title}`} loading="eager" fetchPriority="high" decoding="async" className="aspect-square w-full rounded-[5px] object-cover" />
         </div>
         <div>
           <Link to="/episodios" className="text-xs font-bold uppercase tracking-[0.18em] text-gold hover:underline">← Episódios</Link>

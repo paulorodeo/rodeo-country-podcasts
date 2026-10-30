@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { LonghornStage } from "@/components/home/Sections";
+import { media } from "@/lib/media";
 
 export const Route = createFileRoute("/sobre")({
   head: () => ({
@@ -11,6 +12,9 @@ export const Route = createFileRoute("/sobre")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: "https://podcast.fazenda.rodeo/sobre" },
+      { property: "og:image", content: `https://podcast.fazenda.rodeo${media.cover.src}` },
+      { property: "og:image:alt", content: "Rodeo Country Media — Fazenda Rodeo" },
+      { name: "twitter:image", content: `https://podcast.fazenda.rodeo${media.cover.src}` },
     ],
     links: [{ rel: "canonical", href: "https://podcast.fazenda.rodeo/sobre" }],
   }),

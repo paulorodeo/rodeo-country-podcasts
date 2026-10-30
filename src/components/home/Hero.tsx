@@ -64,7 +64,7 @@ function HeroPlayer({ ep }: { ep: Episode }) {
   const total = mine && p.duration ? p.duration : ep.durationSec ?? 0;
   const pct = total ? (time / total) * 100 : 0;
   return (
-    <div className="mt-8 flex max-w-xl items-center gap-5 rounded-2xl border border-border bg-background/50 p-4 backdrop-blur-md">
+    <div className="mt-8 flex max-w-xl items-center gap-5 rounded-2xl border border-border bg-background/70 p-4 lg:backdrop-blur-md">
       <PlayButton ep={ep} />
       <div className="min-w-0 flex-1">
         <div className="relative h-8" aria-hidden>

@@ -1,4 +1,5 @@
 import "./lib/error-capture";
+import { serveRss, type PodcastRssKV } from "./lib/rss-response.server";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
@@ -46,6 +47,15 @@ function isH3SwallowedErrorBody(body: string): boolean {
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    const url = new URL(request.url);
+    if (request.method === "GET" && (url.pathname === "/rss" || url.pathname === "/rss/")) {
+      return Response.redirect(new URL("/rss.xml", request.url), 301);
+    }
+    if (request.method === "GET" && url.pathname === "/rss.xml") {
+      const { loadFeed } = await import("./lib/feed.server");
+      const kv = (env as { PODCAST_RSS_KV?: PodcastRssKV } | undefined)?.PODCAST_RSS_KV;
+      return serveRss(loadFeed, kv);
+    }
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);

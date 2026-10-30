@@ -14,7 +14,7 @@ export function Hero({ feed }: { feed: PodcastFeed }) {
       {/* Studio photograph — right side */}
       <div className="absolute inset-y-0 right-0 -z-10 w-full lg:w-[58%]">
         <img src={media.studio.src} srcSet={media.studio.srcSet} sizes="(min-width:1024px) 58vw, 100vw" width={780} height={880}
-          alt="" fetchPriority="high" decoding="async" className="h-full w-full object-cover object-[70%_center] opacity-45 lg:opacity-90" />
+          alt="" fetchPriority="low" decoding="async" className="h-full w-full object-cover object-[70%_center] opacity-45 lg:opacity-90" />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-background/10" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/40" />
       </div>

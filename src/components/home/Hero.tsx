@@ -106,7 +106,7 @@ function FallbackIntro() {
   );
 }
 
-function CoverObject({ ep }: { ep?: Episode }) {
+function CoverObject({ ep }: { ep: Episode | undefined }) {
   return (
     <figure className="relative">
       <div aria-hidden className="absolute -inset-8 rounded-full bg-[radial-gradient(circle,rgb(232_188_101/0.25),transparent_70%)] blur-2xl" />

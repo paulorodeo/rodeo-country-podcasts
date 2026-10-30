@@ -32,7 +32,7 @@ export function MiniPlayer() {
           <button type="button" onClick={() => p.skip(-15)} aria-label="Voltar 15 segundos" className="hidden h-9 w-9 place-items-center rounded-full text-champagne hover:bg-accent sm:grid"><RotateCcw className="h-4 w-4" /></button>
           <PlayButton ep={ep} size="md" />
           <button type="button" onClick={() => p.skip(30)} aria-label="Avançar 30 segundos" className="hidden h-9 w-9 place-items-center rounded-full text-champagne hover:bg-accent sm:grid"><RotateCw className="h-4 w-4" /></button>
-          <button type="button" onClick={() => p.setRate(RATES[(RATES.indexOf(p.rate) + 1) % RATES.length])} aria-label={`Velocidade ${p.rate}x`} className="hidden w-12 rounded border border-border py-1 text-xs font-bold text-champagne hover:border-gold md:block">{p.rate}x</button>
+          <button type="button" onClick={() => p.setRate(RATES[(RATES.indexOf(p.rate) + 1) % RATES.length] ?? 1)} aria-label={`Velocidade ${p.rate}x`} className="hidden w-12 rounded border border-border py-1 text-xs font-bold text-champagne hover:border-gold md:block">{p.rate}x</button>
           <label className="hidden items-center gap-2 lg:flex">
             <Volume2 className="h-4 w-4 text-champagne" aria-hidden />
             <span className="sr-only">Volume</span>

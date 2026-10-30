@@ -5,7 +5,7 @@ export const Route = createFileRoute("/rss.xml")({
     handlers: {
       GET: async () => {
         const { loadFeed } = await import("@/lib/feed.server");
-        const { xml } = await loadFeed();
+        const { xml } = await loadFeed({ probeMedia: true });
         if (!xml) {
           return new Response("Feed temporariamente indisponível.", {
             status: 503,

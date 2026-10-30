@@ -43,3 +43,4 @@ jobs:
           curl -sS -L --max-time 25 -o /tmp/rodeo-rss.xml -w "RSS HTTP %{http_code} type %{content_type}\\n" "$BASE/rss.xml"
           curl -sS --max-time 25 -o /dev/null -w "RSS ALIAS HTTP %{http_code} redirect %{redirect_url}\\n" "$BASE/rss"
           grep -q '<rss' /tmp/rodeo-rss.xml
+          python3 scripts/validate-rss.py

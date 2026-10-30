@@ -27,12 +27,12 @@ export function decodeEntities(s: string): string {
 function tag(xml: string, name: string): string | null {
   const re = new RegExp(`<${name}(?:\\s[^>]*)?>([\\s\\S]*?)</${name}>`, "i");
   const m = xml.match(re);
-  return m ? decodeEntities(m[1].trim()) : null;
+  return m ? decodeEntities((m[1] ?? "").trim()) : null;
 }
 function attr(xml: string, name: string, a: string): string | null {
   const re = new RegExp(`<${name}\\s[^>]*?${a}="([^"]*)"`, "i");
   const m = xml.match(re);
-  return m ? decodeEntities(m[1]) : null;
+  return m ? decodeEntities(m[1] ?? "") : null;
 }
 
 export function slugify(s: string): string {
@@ -60,31 +60,32 @@ const BR_V2 = [0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160];
 
 /** Duration from MP3 headers: Xing/Info/VBRI frame count when present, else CBR estimate. */
 export function mp3Duration(buf: Uint8Array, totalBytes: number): number | null {
+  const at = (o: number) => buf[o] ?? 0;
   let off = 0;
-  if (buf[0] === 0x49 && buf[1] === 0x44 && buf[2] === 0x33) {
-    const size = ((buf[6] & 0x7f) << 21) | ((buf[7] & 0x7f) << 14) | ((buf[8] & 0x7f) << 7) | (buf[9] & 0x7f);
-    off = 10 + size + (buf[5] & 0x10 ? 10 : 0);
+  if (at(0) === 0x49 && at(1) === 0x44 && at(2) === 0x33) {
+    const size = ((at(6) & 0x7f) << 21) | ((at(7) & 0x7f) << 14) | ((at(8) & 0x7f) << 7) | (at(9) & 0x7f);
+    off = 10 + size + (at(5) & 0x10 ? 10 : 0);
   }
   for (let i = off; i < buf.length - 4; i++) {
-    if (buf[i] !== 0xff || (buf[i + 1] & 0xe0) !== 0xe0) continue;
-    const ver = (buf[i + 1] >> 3) & 3; // 3=MPEG1, 2=MPEG2, 0=MPEG2.5
-    const layer = (buf[i + 1] >> 1) & 3; // 1 = Layer III
-    const bri = (buf[i + 2] >> 4) & 15;
-    const sri = (buf[i + 2] >> 2) & 3;
+    if (at(i) !== 0xff || (at(i + 1) & 0xe0) !== 0xe0) continue;
+    const ver = (at(i + 1) >> 3) & 3; // 3=MPEG1, 2=MPEG2, 0=MPEG2.5
+    const layer = (at(i + 1) >> 1) & 3; // 1 = Layer III
+    const bri = (at(i + 2) >> 4) & 15;
+    const sri = (at(i + 2) >> 2) & 3;
     if (ver === 1 || layer !== 1 || bri === 0 || bri === 15 || sri === 3) continue;
     const mpeg1 = ver === 3;
-    const sr = [44100, 48000, 32000][sri] / (mpeg1 ? 1 : ver === 2 ? 2 : 4);
+    const sr = ([44100, 48000, 32000][sri] ?? 44100) / (mpeg1 ? 1 : ver === 2 ? 2 : 4);
     const spf = mpeg1 ? 1152 : 576;
-    const mono = ((buf[i + 3] >> 6) & 3) === 3;
+    const mono = ((at(i + 3) >> 6) & 3) === 3;
     const xo = i + (mpeg1 ? (mono ? 21 : 36) : mono ? 13 : 21);
-    const str = (o: number) => String.fromCharCode(buf[o], buf[o + 1], buf[o + 2], buf[o + 3]);
-    const u32 = (o: number) => ((buf[o] << 24) | (buf[o + 1] << 16) | (buf[o + 2] << 8) | buf[o + 3]) >>> 0;
+    const str = (o: number) => String.fromCharCode(at(o), at(o + 1), at(o + 2), at(o + 3));
+    const u32 = (o: number) => ((at(o) << 24) | (at(o + 1) << 16) | (at(o + 2) << 8) | at(o + 3)) >>> 0;
     if (xo + 12 < buf.length && (str(xo) === "Xing" || str(xo) === "Info") && u32(xo + 4) & 1) {
       return (u32(xo + 8) * spf) / sr;
     }
     const vo = i + 36;
     if (vo + 18 < buf.length && str(vo) === "VBRI") return (u32(vo + 14) * spf) / sr;
-    const kbps = (mpeg1 ? BR_V1 : BR_V2)[bri];
+    const kbps = (mpeg1 ? BR_V1 : BR_V2)[bri] ?? 128;
     return ((totalBytes - i) * 8) / (kbps * 1000);
   }
   return null;
@@ -134,9 +135,9 @@ function parseDate(raw: string | null): string | null {
 }
 
 export async function parseFeed(xml: string): Promise<PodcastFeed> {
-  const channel = xml.split(/<item[\s>]/i)[0];
-  const categories = Array.from(new Set([...channel.matchAll(/<category>([\s\S]*?)<\/category>/gi)].map((m) => decodeEntities(m[1].trim()))));
-  const items = [...xml.matchAll(/<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/gi)].map((m) => m[1]);
+  const channel = xml.split(/<item[\s>]/i)[0] ?? "";
+  const categories = Array.from(new Set([...channel.matchAll(/<category>([\s\S]*?)<\/category>/gi)].map((m) => decodeEntities((m[1] ?? "").trim()))));
+  const items = [...xml.matchAll(/<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/gi)].map((m) => m[1] ?? "");
   const usedSlugs = new Set<string>();
   const episodes: Episode[] = await Promise.all(
     items.map(async (it) => {

@@ -49,11 +49,7 @@ export function SiteHeader() {
           <Link to="/episodios" aria-label="Buscar episódios" className="grid h-10 w-10 place-items-center rounded-full text-champagne transition-colors hover:bg-accent">
             <Search className="h-[18px] w-[18px]" />
           </Link>
-          <a href={RADIO_URL} target="_blank" rel="noopener noreferrer" className="btn-gold hidden !px-4 !py-2.5 sm:inline-flex">
-            <Radio className="h-4 w-4" aria-hidden /> Ouça a Rádio
-            <span className="sr-only">(abre em nova aba)</span>
-          </a>
-          <a href={RADIO_URL} target="_blank" rel="noopener noreferrer" aria-label="Rádio ao vivo (abre em nova aba)" className="relative hidden h-10 w-10 place-items-center rounded-full border border-border text-champagne hover:border-gold md:grid">
+          <a href={RADIO_URL} target="_blank" rel="noopener noreferrer" aria-label="Rádio ao vivo (abre em nova aba)" title="Ouvir Rádio Rodeo Country" className="relative grid h-10 w-10 place-items-center rounded-full border border-border text-champagne transition-colors hover:border-gold hover:text-bright-gold">
             <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-destructive motion-safe:animate-pulse" aria-hidden />
             <Radio className="h-4 w-4" />
           </a>
@@ -77,9 +73,6 @@ export function SiteHeader() {
               </li>
             ))}
           </ul>
-          <a href={RADIO_URL} target="_blank" rel="noopener noreferrer" className="btn-gold mt-5 w-full">
-            <Radio className="h-4 w-4" aria-hidden /> Ouça a Rádio <span className="sr-only">(abre em nova aba)</span>
-          </a>
         </nav>
       )}
     </header>

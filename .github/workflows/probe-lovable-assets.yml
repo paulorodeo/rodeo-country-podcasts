@@ -1,7 +1,5 @@
 name: Diagnose Lovable image origins
 on:
-  push:
-    branches: [feat/rss-cloudflare-homologacao]
   workflow_dispatch:
 
 permissions:

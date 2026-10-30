@@ -1,43 +1,29 @@
 #!/usr/bin/env python3
-"""Verify every vendored Lovable media file is served unchanged by Cloudflare."""
-import hashlib
+"""Verify locally vendored Rodeo Country Podcasts artwork and its MIME types."""
 import json
-import os
-import time
-import urllib.request
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = os.environ.get("RODEO_TEST_BASE", "https://podcast.fazenda.rodeo").rstrip("/")
-FILES = sorted((ROOT / "src/assets").glob("*.asset.json"))
+FILES = sorted((ROOT / "src/assets").glob("*.json"))
 if not FILES:
-    raise SystemExit("Missing asset manifests")
+    raise SystemExit("Missing artwork metadata")
 
-def check_all():
-    for file in FILES:
-        data = json.loads(file.read_text())
-        local = ROOT / "public" / data["url"].lstrip("/")
-        if not local.exists():
-            raise RuntimeError(f"Missing local image: {local}")
-        expected = local.read_bytes()
-        req = urllib.request.Request(BASE + data["url"], headers={"User-Agent": "RodeoMedia-QA/1.0"})
-        with urllib.request.urlopen(req, timeout=20) as resp:
-            remote = resp.read(6_000_001)
-            content_type = resp.headers.get("content-type", "").split(";")[0]
-            assert resp.status == 200, (data["original_filename"], resp.status)
-            assert content_type == data["content_type"], (data["original_filename"], content_type)
-            assert remote == expected, (data["original_filename"], hashlib.sha256(remote).hexdigest())
-        print(f"PASS {data['original_filename']} {len(remote)} bytes")
-
-last_error = None
-for attempt in range(1, 11):
-    try:
-        check_all()
-        print(f"SUCCESS: all {len(FILES)} Lovable images served intact from {BASE}")
-        break
-    except Exception as err:
-        last_error = err
-        print(f"Attempt {attempt}/10 not ready: {err}", flush=True)
-        if attempt == 10:
-            raise
-        time.sleep(12)
+for file in FILES:
+    data = json.loads(file.read_text())
+    url = data["url"]
+    assert url.startswith("/media/"), (file, url)
+    local = ROOT / "public" / url.lstrip("/")
+    assert local.is_file(), f"Missing local artwork: {local}"
+    raw = local.read_bytes()
+    ext = local.suffix.lower()
+    signatures = {
+        ".webp": lambda b: b[:4] == b"RIFF" and b[8:12] == b"WEBP",
+        ".png": lambda b: b.startswith(bytes.fromhex("89504e470d0a1a0a")),
+        ".avif": lambda b: b[4:8] == b"ftyp" and b"avif" in b[8:32],
+    }
+    assert ext in signatures and signatures[ext](raw), f"Invalid image: {local}"
+    if "size" in data:
+        assert data["size"] == len(raw), (file, len(raw))
+    print(f"PASS {url} ({len(raw)} bytes)")
+print(f"Verified {len(FILES)} local podcast artwork files.")

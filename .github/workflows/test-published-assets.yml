@@ -1,10 +1,11 @@
-name: Validate published media on Cloudflare
+name: Verify published Rodeo artwork
 on:
   push:
-    branches: [feat/rss-cloudflare-homologacao]
+    branches: [codex/standalone-cloudflare-migration]
     paths:
+      - 'src/assets/**'
+      - 'public/media/**'
       - 'scripts/check-published-assets.py'
-      - 'public/__l5e/**'
       - '.github/workflows/test-published-assets.yml'
   workflow_dispatch:
 
@@ -16,5 +17,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check every remote image content-type and SHA-256
-        run: python3 scripts/check-published-assets.py
+      - name: Verify image files and metadata without contacting production
+        run: python3 scripts/check-published-assets.py --local

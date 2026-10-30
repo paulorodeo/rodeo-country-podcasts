@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "paulorodeo-rodeo-country-podcasts",
+  "main": "src/server.ts",
+  "compatibility_date": "2026-10-30",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "kv_namespaces": [
+    { "binding": "PODCAST_RSS_KV", "id": "6294b2c18dce4a0ca3fb8cc4f8150ea9" }
+  ]
+}

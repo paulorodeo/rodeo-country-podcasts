@@ -1,0 +1,38 @@
+name: Validate standalone Cloudflare migration
+on:
+  push:
+    branches: [codex/standalone-cloudflare-migration]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Reconcile dependency lockfile
+        run: bun install
+      - name: Commit lockfile updated for native Cloudflare dependencies
+        run: |
+          if ! git diff --quiet -- bun.lock; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add bun.lock
+            git commit -m "build: synchronize standalone Cloudflare lockfile"
+            git push origin HEAD:codex/standalone-cloudflare-migration
+          fi
+      - name: Unit tests
+        run: bun run test
+      - name: Verify local media
+        run: python3 scripts/check-published-assets.py --local
+      - name: Production build without editor-specific tooling
+        run: bun run build
+      - name: Validate Worker config
+        run: |
+          test -f wrangler.jsonc
+          grep -q '"PODCAST_RSS_KV"' wrangler.jsonc

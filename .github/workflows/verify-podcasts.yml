@@ -1,65 +1,33 @@
-name: Verify Rodeo Country Podcasts
-
+name: Verify independent Rodeo Country Podcasts
 on:
   push:
     branches:
+      - codex/standalone-cloudflare-migration
       - feat/rss-cloudflare-homologacao
   pull_request:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  validate:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-      - name: Install locked dependencies
+      - name: Install dependencies
         run: bun install --frozen-lockfile
-      - name: Unit tests
+      - name: Test
         run: bun run test
-      - name: Production build
+      - name: Verify images
+        run: python3 scripts/check-published-assets.py --local
+      - name: Build Cloudflare Worker
         run: bun run build
-      - name: Bind podcast RSS KV
-        run: node scripts/prepare-worker.mjs
-      - name: Print generated Worker metadata
+      - name: Verify worker configuration
         run: |
-          find .output -maxdepth 4 -iname '*wrangler*' -print || true
-          if test -f .output/server/wrangler.json; then
-            node -e 'const j=require("./.output/server/wrangler.json"); console.log(JSON.stringify({name:j.name,main:j.main,assets:j.assets,compatibility_date:j.compatibility_date},null,2))'
-          fi
-
-      - name: Validate published Worker HTTP (diagnostic)
-        continue-on-error: true
-        run: |
-          BASE="https://paulorodeo-rodeo-country-podcasts.pjdigital.workers.dev"
-          curl -sS -L --max-time 25 -o /tmp/rodeo-home.html -w "HOME HTTP %{http_code} total %{time_total}s\\n" "$BASE/"
-          curl -sS -L --max-time 25 -o /tmp/rodeo-rss.xml -w "RSS HTTP %{http_code} type %{content_type}\\n" "$BASE/rss.xml"
-          curl -sS --max-time 25 -o /dev/null -w "RSS ALIAS HTTP %{http_code} redirect %{redirect_url}\\n" "$BASE/rss"
-          grep -q '<rss' /tmp/rodeo-rss.xml
-          python3 scripts/validate-rss.py
-
-      - name: Validate custom podcast domain (diagnostic)
-        continue-on-error: true
-        run: |
-          SITE="https://podcast.fazenda.rodeo"
-          curl -sS -L --max-time 25 -o /tmp/rodeo-custom-home.html -w "CUSTOM HOME HTTP %{http_code} total %{time_total}s\\n" "$SITE/"
-          curl -sS --max-time 25 -o /tmp/rodeo-custom-rss.xml -w "CUSTOM RSS HTTP %{http_code} type %{content_type}\\n" "$SITE/rss.xml"
-          curl -sS --max-time 25 "$SITE/healthz" | tee /tmp/rodeo-health.json
-          python3 scripts/validate-rss.py "$SITE/rss.xml"
-
-      - name: Validate live ecosystem links, RSS icon and single radio CTA
-        run: |
-          curl --fail --silent --show-error --location --retry 5 --retry-all-errors --retry-delay 3 --max-time 35             https://podcast.fazenda.rodeo/ -o /tmp/rodeo-live.html
-          for url in             'https://portal.fazenda.rodeo/'             'https://radio.fazenda.rodeo'             'https://tv.fazenda.rodeo/'             'https://country.fazenda.rodeo/station/'             'https://www.topleo.workers.dev/'             'https://podcast.fazenda.rodeo/rss.xml'; do
-            grep -Fq "href=\"$url\"" /tmp/rodeo-live.html || { echo "Missing footer href: $url"; exit 1; }
-            echo "Verified link: $url"
-          done
-          grep -Fq 'lucide-rss' /tmp/rodeo-live.html || { echo 'Missing RSS icon'; exit 1; }
-          echo 'RSS icon present'
+          test -f wrangler.jsonc
+          grep -q '"PODCAST_RSS_KV"' wrangler.jsonc

@@ -3,6 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { feedQuery } from "@/lib/feed.functions";
 import { Hero } from "@/components/home/Hero";
 import { DiscoverAndRecent, LonghornStage, Programs, RssSection } from "@/components/home/Sections";
+import { media } from "@/lib/media";
 
 export const Route = createFileRoute("/")({
   loader: ({ context }) => context.queryClient.ensureQueryData(feedQuery),
@@ -13,6 +14,9 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Rodeo Country Podcasts — Fazenda Rodeo" },
       { property: "og:description", content: "Música country, rodeio e vida no campo em episódios da Rodeo Country Media." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:image", content: media.studio.src },
+      { name: "twitter:image", content: media.studio.src },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],

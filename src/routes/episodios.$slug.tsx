@@ -19,8 +19,9 @@ export const Route = createFileRoute("/episodios/$slug")({
       { property: "og:title", content: loaderData?.title ?? "Episódio — Rodeo Country Podcasts" },
       { property: "og:description", content: loaderData?.description || "Episódio da Rodeo Country Media." },
       { property: "og:type", content: "article" },
+      { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: `/episodios/${params.slug}` },
-      ...(loaderData?.image ? [{ property: "og:image", content: loaderData.image }, { name: "twitter:image", content: loaderData.image }] : []),
+      ...(loaderData?.image?.startsWith("https://") ? [{ property: "og:image", content: loaderData.image }, { name: "twitter:image", content: loaderData.image }] : [{ property: "og:image", content: media.cover.src }, { name: "twitter:image", content: media.cover.src }]),
     ],
     links: [{ rel: "canonical", href: `/episodios/${params.slug}` }],
   }),
@@ -30,7 +31,8 @@ export const Route = createFileRoute("/episodios/$slug")({
 function EpisodePage() {
   const { slug } = Route.useParams();
   const { data: feed } = useSuspenseQuery(feedQuery);
-  const ep = feed.episodes.find((e) => e.slug === slug)!;
+  const ep = feed.episodes.find((e) => e.slug === slug);
+  if (!ep) return null;
   return (
     <article className="surface-wood py-14">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 md:grid-cols-[360px_1fr]">

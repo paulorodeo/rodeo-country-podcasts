@@ -20,10 +20,10 @@ export const Route = createFileRoute("/episodios/$slug")({
       { property: "og:description", content: loaderData?.description || "Episódio da Rodeo Country Media." },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:url", content: `/episodios/${params.slug}` },
+      { property: "og:url", content: `https://podcast.fazenda.rodeo/episodios/${encodeURIComponent(params.slug)}` },
       ...(loaderData?.image?.startsWith("https://") ? [{ property: "og:image", content: loaderData.image }, { name: "twitter:image", content: loaderData.image }] : [{ property: "og:image", content: media.cover.src }, { name: "twitter:image", content: media.cover.src }]),
     ],
-    links: [{ rel: "canonical", href: `/episodios/${params.slug}` }],
+    links: [{ rel: "canonical", href: `https://podcast.fazenda.rodeo/episodios/${encodeURIComponent(params.slug)}` }],
   }),
   component: EpisodePage,
 });

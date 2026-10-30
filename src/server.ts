@@ -48,6 +48,12 @@ function isH3SwallowedErrorBody(body: string): boolean {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     const url = new URL(request.url);
+    if (request.method === "GET" && url.pathname === "/healthz") {
+      const bound = Boolean((env as { PODCAST_RSS_KV?: PodcastRssKV } | undefined)?.PODCAST_RSS_KV);
+      return Response.json({ status: "ok", service: "rodeo-country-podcasts", rssStoreBound: bound }, {
+        headers: { "cache-control": "no-store" },
+      });
+    }
     if (request.method === "GET" && (url.pathname === "/rss" || url.pathname === "/rss/")) {
       return Response.redirect(new URL("/rss.xml", request.url), 301);
     }

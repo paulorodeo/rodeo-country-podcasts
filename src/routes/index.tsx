@@ -22,6 +22,8 @@ export const Route = createFileRoute("/")({
     ],
     links: [
       { rel: "canonical", href: "/" },
+      // Preload the exact responsive LCP image before the browser discovers the hero markup.
+      { rel: "preload", as: "image", href: media.studio.src, imageSrcSet: media.studio.srcSet, imageSizes: "(min-width:1024px) 58vw, 100vw", fetchPriority: "high" },
       { rel: "preload", href: heroFontUrl, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
     ],
   }),

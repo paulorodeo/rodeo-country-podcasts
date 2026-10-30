@@ -12,9 +12,9 @@ export function LonghornMark({ className, sizes = "96px", eager = false }: { cla
 export function Wordmark({ className = "" }: { className?: string }) {
   return (
     <span className={`flex flex-col leading-none ${className}`}>
-      <span className="font-condensed text-gold-metal text-[1.35rem] font-bold uppercase tracking-[0.095em]">Rodeo Country</span>
-      <span className="mt-1 text-[0.56rem] font-extrabold uppercase tracking-[0.27em] text-champagne/80">
-        Media <span className="text-gold">·</span> Podcasts
+      <span className="brand-name">RODEO COUNTRY</span>
+      <span className="brand-signature mt-1">
+        MEDIA · PODCASTS
       </span>
     </span>
   );

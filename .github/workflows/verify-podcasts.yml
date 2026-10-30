@@ -1,0 +1,34 @@
+name: Verify Rodeo Country Podcasts
+
+on:
+  push:
+    branches:
+      - feat/rss-cloudflare-homologacao
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install locked dependencies
+        run: bun install --frozen-lockfile
+      - name: Unit tests
+        run: bun run test
+      - name: Production build
+        run: bun run build
+      - name: Print generated Worker metadata
+        run: |
+          find .output -maxdepth 4 -iname '*wrangler*' -print || true
+          if test -f .output/server/wrangler.json; then
+            node -e 'const j=require("./.output/server/wrangler.json"); console.log(JSON.stringify({name:j.name,main:j.main,assets:j.assets,compatibility_date:j.compatibility_date},null,2))'
+          fi

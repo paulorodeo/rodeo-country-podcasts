@@ -99,7 +99,7 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
 
 export function Programs() {
   return (
-    <section aria-labelledby="programas" className="bg-background py-16 sm:py-20">
+    <section aria-labelledby="programas" className="below-fold-section bg-background py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHead kicker="Universos editoriais" title="Histórias que merecem ser contadas" titleClassName="editorial-title mt-3"
           desc="Quatro linhas editoriais em desenvolvimento. São categorias conceituais até a publicação do catálogo oficial."
@@ -128,7 +128,7 @@ export function Programs() {
 
 export function LonghornStage() {
   return (
-    <section aria-labelledby="spirit-title" className="longhorn-stage relative isolate flex items-center justify-center overflow-hidden py-16 sm:py-20">
+    <section aria-labelledby="spirit-title" className="below-fold-section longhorn-stage relative isolate flex items-center justify-center overflow-hidden py-16 sm:py-20">
       <div className="mx-auto flex w-full max-w-4xl flex-col items-center px-4 text-center">
         <p className="stage-kicker mb-8">The Spirit of the West — O espírito do campo</p>
         <LonghornMark className="h-auto w-[min(78vw,560px)] drop-shadow-[0_20px_40px_rgb(0_0_0/0.8)]" sizes="(min-width:640px) 560px, 78vw" />
@@ -150,7 +150,7 @@ export function RssSection() {
     }
   };
   return (
-    <section aria-labelledby="rss-title" className="subscribe-section relative isolate overflow-hidden">
+    <section aria-labelledby="rss-title" className="below-fold-section subscribe-section relative isolate overflow-hidden">
       <img src={media.sunset.src} srcSet={media.sunset.srcSet} sizes="100vw" width={1400} height={542} alt="Cowboy de costas observando o pôr do sol sobre a fazenda" loading="lazy" decoding="async"
         className="subscribe-image" />
       <div aria-hidden className="subscribe-shade absolute inset-0 -z-10" />
